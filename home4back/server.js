@@ -17,7 +17,7 @@ app.use(cookieParser());
 
 const secret = "secret" // TODO: pick a stronger secret
 
-const maxAge = 3600 // jwt token expires in an hour
+const maxAge = "1h" // jwt token expires in an hour
 
 // TODO: 
 const generateJWT = (id) => {
@@ -136,7 +136,8 @@ app.get("/auth/authenticate", async (req, res) => {
 //logout a user = deletes the jwt
 app.get('/auth/logout', (req, res) => {
     console.log('delete jwt request arrived');
-    res.status(202).clearCookie('jwt').json({ "Msg": "cookie cleared" }).send
+	// QUESTION: using the clearCookie method user remained logged in, why?
+    res.status(202).cookie('jwt', '', { maxAge: 1}).json({ "Msg": "cookie cleared" }).send
 })
 
 /* Social media app routes end */

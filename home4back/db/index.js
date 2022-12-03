@@ -27,18 +27,28 @@ const createUsersTblQuery = `
     );`;
 
 // Create posts Table query
-/*
+
 const createPostsTblQuery = `
     CREATE TABLE IF NOT EXISTS "posts" (
         id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-        user uuid i
-    )`;
-*/
+        userid uuid NOT NULL,
+  		img varchar(200),
+  		postDate timestamp,
+  		body varchar(200)
+    );`;
+
 
 execute(createUsersTblQuery).then((result) => {
 	if (result) {
+		console.log(result)
 		console.log('Table "users" is created');
 	}
 });
+
+execute(createPostsTblQuery).then((result) => {
+	if (result) {
+		console.log('Table "posts" is created')
+	} 
+})
 
 module.exports = pool;
