@@ -1,0 +1,18 @@
+{
+  "name": "home4back",
+  "version": "1.0.0",
+  "description": "Homework 4 backend",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "node server",
+    "watch": "nodemon server"
+  },
+  "author": "Kaspar Kipp, Kevin Kirbits, Siim Turban",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "pg": "^8.8.0"
+  }
+}
