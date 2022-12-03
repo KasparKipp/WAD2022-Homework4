@@ -11,7 +11,7 @@ const routes = [
 		component: HomeView,
 		beforeEnter: async (to, from, next) => {
 			console.log("Checking if user is authenticated")
-			let isAuth = true //auth.authenticated();
+			let isAuth = auth.authenticated();
 			isAuth ? next() : next("/login");
 		},
 	},

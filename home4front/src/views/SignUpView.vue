@@ -1,123 +1,95 @@
 <template>
-    
-    <div class="form-container">
-    
-    <div class="col">
-        
-       
-      </div>
-    <form @submit.prevent="onSubmit">
-        
-        <div class="form-group" :class="{ error: v$.form.email.$errors.length }">
-      <label for="">Email  </label>
-      <input class="form-control" placeholder="Enter your username" type="email" v-model="v$.form.email.$model">
-      <div class="pre-icon os-icon os-icon-user-male-circle"></div>
-          <!-- error message -->
-      <div class="input-errors" v-for="(error, index) of v$.form.email.$errors" :key="index">
-        <div class="error-msg">{{ error.$message }}</div>
-      </div>
-    </div>
-        
-        <div class="form-group" :class="{ error: v$.form.password.$errors.length }">
-      <label for="">Password</label>
-      <input class="form-control" placeholder="Enter your password" type="password" v-model="v$.form.password.$model">
-      <div class="pre-icon os-icon os-icon-fingerprint"></div>
-          <!-- error message -->
-      <div class="input-errors" v-for="(error, index) of v$.form.password.$errors" :key="index">
-        <div class="error-msg">{{ error.$message }}</div>
-      </div>
-    </div>
-        <br> 
-        
-        
-            <div class="buttons-w">
-      <button :disabled="v$.form.$invalid" class="btn btn-primary">Login</button>
-    </div>
-        
-        </form>
-    <div class="col">
-        <a href="#" style="color:blue" class="btn">Forgot password?</a>
-        </div>
-    </div>
-  </template>
-  
-  <script>
-  
-  
-  
-  export default {
-    name: 'SignUpView',
-    components:{
-      
-    },
-    props: {
-      //msg: String
-    },
-    setup () {
-    
-  },
+  <div class="form">
+    <h3>SignUp</h3>
+    <label for="email">Email</label>
+    <input type="email" name="email"  required v-model="email">
+    <label for="password">Password</label>
+    <input type="password" name="password" required v-model="password">
+    <button @click="SignUp" class="SignUp">SignUp</button>
+  </div>
+</template>
 
-  data() {
+<script>
+export default {
+name: "SignUpView", 
+
+data: function() {
     return {
-      form: {
-        email: '',
-        password: '',
-      },
-    }
-  },
-    
-  validations() {
-    return {
-      form: {
-        email: {
-           required, email 
-        },
-        password: {
-            required, 
-            min: minLength(8),
-            max: maxLength(15),
-            containsPasswordRequirement: helpers.withMessage(
-          () => `The password requires an uppercase`, 
-          (value) => /(?=.*[A-Z])/.test(value)
-        ),
-        containsPasswordRequirement2: helpers.withMessage(
-          () => `The password requires 2 lowercase charactes`, 
-          (value) => /((?=.*[a-z].*[a-z]))/.test(value)
-        ),
-        containsPasswordRequirement3: helpers.withMessage(
-          () => `The password must contain a number`, 
-          (value) => /(?=.*[0-9])/.test(value)
-        ),
-        containsPasswordRequirement4: helpers.withMessage(
-          () => `The password must contain "_" ` , 
-          (value) => /(?=.*["_"])/.test(value)
-        ),
-        containsPasswordRequirement5: helpers.withMessage(
-          () => `The password has to begin with an uppercase`, 
-          (value) => /(?=.*[A-Z])/.test(value[0])
-        ),
-            
-            
-        },
-      },
-    }
-  },
-  
-  
+   email: '',
+   password: '',
   }
-  </script>
-  
+  },
+  methods: {
 
-  <style scoped>
-  .form-container {
-  margin: 20px auto;
-  display: block;
-  width: 300px;
-  text-align: center;
-  background-color: lightgray;
+
+SignUp() {
+      var data = {
+        email: this.email,
+        password: this.password
+      };
+      // using Fetch - post method - send an HTTP post request to the specified URI with the defined body
+      fetch("http://localhost:3000/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+          credentials: 'include', //  Don't forget to specify this if you need cookies
+          body: JSON.stringify(data),
+      })
+      .then((response) => response.json())
+      .then((data) => {
+      console.log(data);
+      this.$router.push("/");
+      //location.assign("/");
+      })
+      .catch((e) => {
+        console.log(e);
+        console.log("error");
+      });
+    },
+  }, 
+  }
+</script>
+
+<style scoped>
+.form {
+  max-width: 420px;
+  margin: 30px auto;
+  background: rgb(167, 154, 154);
+  text-align: left;
+  padding: 40px;
   border-radius: 10px;
-  padding: 10px;
-
 }
-  
-  </style>
+h3 {
+  text-align: center;
+  color: rgb(8, 110, 110);
+}
+label {
+  color: rgb(8, 110, 110);
+  display: inline-block;
+  margin: 25px 0 15px;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+input {
+  display: block;
+  padding: 10px 6px;
+  width: 100%;
+  box-sizing: border-box;
+  border: none;
+  border-bottom: 1px solid white;
+  color: blue;
+}
+button {
+  background: rgb(8, 110, 110);
+  border: 0;
+  padding: 10px 20px;
+  margin-top: 20px;
+  color: white;
+  border-radius: 20px;
+  align-items: center;
+  text-align: center;
+}
+</style>

@@ -35,7 +35,7 @@ const createPostsTblQuery = `
     )`;
 */
 
-execute(createTblQuery).then((result) => {
+execute(createUsersTblQuery).then((result) => {
 	if (result) {
 		console.log('Table "users" is created');
 	}

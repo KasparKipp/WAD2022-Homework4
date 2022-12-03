@@ -1,14 +1,15 @@
 <template>
   <section class="content-area">
     <div class="left">
+      <button v-if = "authResult" @click="Logout" >Logout</button>
     </div>
     <div class="centerdiv">
 
       <!-- Posts start -->
       <div class="posts">
-
+        <h1>Post Will appear here</h1>
         <!-- Inserting posts from ThePost components -->
-        <PostComp :post="post"></PostComp>
+        <!--<PostComp :post="post"></PostComp>-->
 
         <div class="user-post">
           <!-- Like reset button -->
@@ -31,19 +32,43 @@
 
 <script>
 import PostComp from '../components/PostComp.vue';
+import auth from '../auth/index'
 
 export default {
   name: 'HomeView',
   components: {
     PostComp,
   },
+  data: function() {
+    return {
+    posts:[ ],
+    authResult: auth.authenticated()
+    }
+  },
   props: {
-    msg: String
+    //msg: String
   },
   methods: {
     reset() {
       this.$store.commit('reset')
-    }
+    },
+    Logout() {
+      fetch("http://localhost:3000/auth/logout", {
+          credentials: 'include', //  Don't forget to specify this if you need cookies
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        console.log('jwt removed');
+        //console.log('jwt removed:' + auth.authenticated());
+        this.$router.push("/login");
+        //location.assign("/");
+      })
+      .catch((e) => {
+        console.log(e);
+        console.log("error logout");
+      })
+    },
   },
 
 }
