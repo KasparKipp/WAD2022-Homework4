@@ -11,8 +11,12 @@ const routes = [
 		component: HomeView,
 		beforeEnter: async (to, from, next) => {
 			console.log("Checking if user is authenticated")
-			let isAuth = auth.authenticated();
-			isAuth ? next() : next("/login");
+			let isAuth = await auth.authenticated();
+			if (!isAuth) {
+				next("/login");
+			} else {
+				next();
+			}
 		},
 	},
 	{
@@ -26,12 +30,12 @@ const routes = [
 		component: LogInView,
 	},
 	{
-		path: "/about",
-		name: "about",
+		path: "/contacts",
+		name: "Contacts",
 		// route level code-splitting
 		// this generates a separate chunk (about.[hash].js) for this route
 		// which is lazy-loaded when the route is visited.
-		component: () => import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
+		component: () => import(/* webpackChunkName: "about" */ "../views/ContactsView.vue"),
 	},
 ];
 
