@@ -1,7 +1,6 @@
 export default {
 	user: { authenticated: false },
 	authenticated: async function () {
-		this.user.authenticated = false
 		console.log("Auth is checking: ")
 		await fetch("http://localhost:3000/auth/authenticate", {
 			credentials: "include", //  Don't forget to specify this if you need cookies

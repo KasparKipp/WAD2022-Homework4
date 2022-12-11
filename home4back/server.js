@@ -171,6 +171,7 @@ app.delete('/posts/:id', async (req, res) => {
 
 /* Social media app routes start */
 
+// POST login
 app.post("/auth/login", async (req, res) => {
 	try {
 		console.log("a login request has arrived");
@@ -255,7 +256,7 @@ app.get("/auth/authenticate", async (req, res) => {
 		} else {
 			//applies when the token does not exist
 			//console.log("author is not authinticated");
-			res.send({ authenticated: authenticated }); // authenticated = false
+			res.send({ authenticated: false }); // authenticated = false
 		}
 	} catch (err) {
 		console.error(err.message);
