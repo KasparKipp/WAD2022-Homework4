@@ -1,6 +1,6 @@
 <template>
   <!-- Creating Posts, (v-for="post in posts"): goes through every available posts data -->
-  <div :key="post.id" v-for="post in posts" class="user-post">
+  
     <div class="user-post-header">
       <!-- Adding profile picture -->
       <img
@@ -33,14 +33,13 @@
         <p>{{ post.likes }} likes</p>
       </button>
     </div>
-  </div>
 </template>
 
 <script>
 export default {
   name: "PostComp",
   props: {
-    posts: Array,
+    post: Object,
   },
   methods: {
     
@@ -67,25 +66,6 @@ a {
   color: #42b983;
 }
 
-.user-post {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  width: 300px;
-  max-width: 400px;
-  height: auto;
-  margin-top: 5px;
-  background-color: darkgray;
-  border-radius: 10px;
-  padding: 5px 2px;
-
-  flex: 0 1 99%;
-
-}
-
-@media screen and (max-width: 600px) {
-  .user-post {
-    flex: 0 1 48%;
-  }
-}
 
 .user-post-header {
   position: relative;

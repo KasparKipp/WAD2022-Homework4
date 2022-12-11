@@ -8,9 +8,13 @@
  
       <!-- Posts start -->
       <div class="posts">
-        <h1>Post Will appear here</h1>
+        <h1 v-if = "posts.length == 0">Go ahead and add some posts!</h1>
         <!-- Inserting posts from ThePost components -->
-        <PostComp :posts="posts"></PostComp>
+        <div :key="post.id" v-for="post in posts" class="user-post">
+          <PostComp :post="post"></PostComp>
+        </div>
+
+        <!--<PostComp :posts="posts"></PostComp>-->
 
         <div class="user-post">
           <!-- Like reset button -->
@@ -34,7 +38,6 @@
 <script>
 import PostComp from '../components/PostComp.vue';
 import auth from '../auth/index'
-import { tsImportEqualsDeclaration } from '@babel/types';
 
 export default {
   name: 'HomeView',
@@ -49,8 +52,16 @@ export default {
   },
   methods: {
     deleteAll() {
-      this.$store.state.posts = []
-      // TODO: delete all from database
+      this.posts = []
+      fetch("http://localhost:3000/posts", {
+        method: "DELETE",
+        credentials: 'include',
+      })
+      .then((response) => response.json())
+      .catch((e) => {
+        console.log(e);
+        console.log("error");
+      });
     },
     Logout() {
       fetch("http://localhost:3000/auth/logout", {
@@ -148,5 +159,24 @@ export default {
   grid-template-columns: 20% 1fr 1fr 1fr 20%;
   gap: 10px;
   width: calc(100% - 10px);
+}
+.user-post {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  width: 300px;
+  max-width: 400px;
+  height: auto;
+  margin-top: 5px;
+  background-color: darkgray;
+  border-radius: 10px;
+  padding: 5px 2px;
+
+  flex: 0 1 99%;
+
+}
+
+@media screen and (max-width: 600px) {
+  .user-post {
+    flex: 0 1 48%;
+  }
 }
 </style>

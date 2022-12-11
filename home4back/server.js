@@ -32,7 +32,7 @@ app.listen(port, () => {
 
 // TODO: configure routes for our social media app
 
-// TODO: GET posts
+// GET all posts
 app.get("/posts", async (req, res) => {
 	try {
 		console.log("getting all posts");
@@ -53,6 +53,33 @@ app.get("/posts", async (req, res) => {
 		
 		res.status(201).json({
 			posts: posts,
+		}).send;
+	} catch (error) {
+		res.status(401).json({ error: error.message });
+	}
+})
+// TODO: GET post by id
+app.get("/posts/:id", async (req, res) => {
+	try {
+		const token = req.cookies.jwt;
+		const id = req.params.id
+		console.log("Getting post with id: ", id);
+		console.log("Token: ", token);
+		// This throws error if jwt.verify fails.
+		const is_auth = jwt.verify(token, secret);
+		console.log("User is authorised");
+		const post = await pool.query(
+			// insert the user and the hashed password into the database
+			"SELECT * FROM posts WHERE id = $!", [id]
+		);
+		if (post.rows[0].length === 0) {
+			console.log("POSTITUSt EI LEITUD");
+		} else {
+			console.log("Postitus leiti");
+		}
+
+		res.status(201).json({
+			post: post,
 		}).send;
 	} catch (error) {
 		res.status(401).json({ error: error.message });
@@ -92,8 +119,42 @@ app.post("/posts", async (req, res) => {
 
 // TODO: Update post
 
-// TODO: Delete post (id or all)
+// Delete all posts:
+app.delete("/posts", async (req, res) => {
+	try {
+		console.log("Deleting all posts");
+		const token = req.cookies.jwt;
+		// If not auth this will throw
+		const is_auth = jwt.verify(token, secret);
 
+		const deletePost = await pool.query(
+			// insert the user and the hashed password into the database
+			"TRUNCATE posts"
+		);
+		res.status(204).cookie("jwt", token, { maxAge: 6000000, httpOnly: true }).send;
+	} catch (error) {
+		res.status(401).json({ error: error.message });
+	}
+});
+
+// Delete a post by id:
+app.delete('/posts/:id', async (req, res) => {
+	try {
+		console.log("Deleting post", id);
+		const token = req.cookies.jwt;
+		const id = req.params.id
+		// If not auth this will throw
+		const is_auth = jwt.verify(token, secret);
+
+		const deletebyId = await pool.query(
+			// insert the user and the hashed password into the database
+			"DELETE FROM posts where id = $1", [id]
+		);
+		res.status(204).cookie("jwt", token, { maxAge: 6000000, httpOnly: true }).send;
+	} catch (error) {
+		res.status(401).json({ error: error.message });
+	}
+});
 
 /* Social media app routes start */
 
