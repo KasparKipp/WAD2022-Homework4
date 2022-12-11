@@ -32,11 +32,71 @@ app.listen(port, () => {
 
 // TODO: configure routes for our social media app
 
+// TODO: GET posts
+app.get("/posts", async (req, res) => {
+	try {
+		console.log("getting all posts");
+		const token = req.cookies.jwt;
+		console.log("Token: ", token)
+		// This throws error if jwt.verify fails. 
+		const is_auth = jwt.verify(token, secret)
+		console.log("User is authorised")
+		const posts = await pool.query(
+			// insert the user and the hashed password into the database
+			"SELECT * FROM posts ORDER BY 1 "
+		);
+		if (posts.rows.length === 0) {
+			console.log("POSTITUSI EI LEITUD");
+		} else {
+			console.log("Postitusi leiti")
+		}
+		
+		res.status(201).json({
+			posts: posts,
+		}).send;
+	} catch (error) {
+		res.status(401).json({ error: error.message });
+	}
+})
+// TODO: Add post
+app.post("/posts", async (req, res) => {
+
+	try {
+		console.log("adding a post");
+		const token = req.cookies.jwt;
+		const { img, body } = req.body;
+		console.log("---------")
+		console.log("img: ", img, "\n body: ", body)
+		console.log("---------");
+		const is_auth = jwt.verify(token, secret);
+		console.log(`Value of is_auth: ${is_auth}`);
+
+		const userPost = await pool.query(
+			// insert the user and the hashed password into the database
+			"INSERT INTO posts(img, body) values ($1, $2) RETURNING *",
+			[img, body]
+		);
+		console.log("Posts: ", userPost.rows)
+		if (userPost.rows.length === 0) {
+			console.log("postitust ei lisatud")
+			return res.status(401).json({ error: "Post was not added" });
+		}
+		token = generateJWT(userPost.rows[0].userid);
+		res.status(201).cookie("jwt", token, { maxAge: 6000000, httpOnly: true }).json({
+			user_id: userPost.rows[0].userid,
+		}).send;
+	} catch (error) {
+		res.status(401).json({ error: error.message });
+	}
+})
+
+// TODO: Update post
+
+// TODO: Delete post (id or all)
+
+
 /* Social media app routes start */
 
-// TODO: Homepage route, Look up requirements from assignemnt
-
-// TODO: login
 app.post("/auth/login", async (req, res) => {
 	try {
 		console.log("a login request has arrived");
@@ -97,12 +157,10 @@ app.post("/auth/signup", async (req, res) => {
 	}
 })
 
-// TODO: isAuth
 app.get("/auth/authenticate", async (req, res) => {
 	console.log("authentication request has been arrived");
 	const token = req.cookies.jwt; // assign the token named jwt to the token const
-	//console.log("token " + token);
-	let authenticated = false; // a user is not authenticated until proven the opposite
+
 	try {
 		if (token) {
 			//checks if the token exists
@@ -113,14 +171,14 @@ app.get("/auth/authenticate", async (req, res) => {
 					// not verified, redirect to login page
 					console.log(err.message);
 					console.log("token is not verified");
-					res.send({ authenticated: authenticated }); // authenticated = false
+					res.send({ authenticated: false }); // authenticated = false
 				} else {
 					// token exists and it is verified
 					console.log("author is authinticated");
 					authenticated = true;
-					res.send({ authenticated: authenticated }); // authenticated = true
+					res.send({ authenticated: true }); // authenticated = true
 				}
-			});
+			})
 		} else {
 			//applies when the token does not exist
 			console.log("author is not authinticated");
@@ -132,7 +190,6 @@ app.get("/auth/authenticate", async (req, res) => {
 	}
 })
 
-// TODO: logout
 //logout a user = deletes the jwt
 app.get('/auth/logout', (req, res) => {
     console.log('delete jwt request arrived');

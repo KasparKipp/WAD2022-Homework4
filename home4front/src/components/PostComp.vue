@@ -9,7 +9,7 @@
           alt="User profile picture"
       />
 
-      <p>{{ post.date }}</p>
+      <p>{{ new Date(post.postdate.slice(0, -2)).toDateString() }}</p>
 
       <div id="myData"></div>
     </div>
@@ -39,15 +39,11 @@
 <script>
 export default {
   name: "PostComp",
-  computed: {
-    posts() {
-      return this.$store.state.posts
-    },
+  props: {
+    posts: Array,
   },
   methods: {
-    like(post) {
-      this.$store.commit('like', post.id)
-    },
+    
   },
 }
 </script>

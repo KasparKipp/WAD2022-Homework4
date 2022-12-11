@@ -1,38 +1,35 @@
 <template>
   <div class="form">
-    <h3>LogIn</h3>
-    <label for="email">Email</label>
-    <input type="email" name="email"  required v-model="email">
-    <label for="password">Password</label>
-    <input type="password" name="password" required v-model="password">
+    <h3>Add a post</h3>
+    <label for="body">Write your post</label>
+    <input type="text" name="body"  required v-model="body">
+    <label for="password">Add a picture URL</label>
+    <input type="url" name="image_url" required v-model="img">
     <div class="container">
-      <button @click="LogIn"  class="center">LogIn</button>
-      <button @click='this.$router.push("/signup")' class="center">Signup</button>
+      <button @click="Post"  class="center">Post</button>
+      <button @click='this.$router.push("/")' class="center">Go back</button>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-name: "LogInView", 
+name: "AddPostView", 
 
 data: function() {
     return {
-   email: '',
-   password: '',
+   img: '',
+   body: '',
   }
   },
   methods: {
-
-
-LogIn() {
+Post() {
       var data = {
-        email: this.email,
-        password: this.password,
-        user_id: this.user_id,
+        img: this.img,
+        body: this.body
       };
       // using Fetch - post method - send an HTTP post request to the specified URI with the defined body
-      fetch("http://localhost:3000/auth/login", {
+      fetch("http://localhost:3000/posts", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -42,9 +39,7 @@ LogIn() {
       })
       .then((response) => response.json())
       .then((data) => {
-      this.user_id = data.user_id
-      console.log(data);
-      console.log(this.user_id)
+      console.log("Postitamisest saadud data on: ", data);
       //this.$router.push("/");
       location.assign("/");
       })

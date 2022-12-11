@@ -30,12 +30,21 @@ const createUsersTblQuery = `
 
 const createPostsTblQuery = `
     CREATE TABLE IF NOT EXISTS "posts" (
-        id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-        userid uuid NOT NULL,
+        id SERIAL PRIMARY KEY,
   		img varchar(200),
-  		postDate timestamp,
+  		postDate timestamp DEFAULT now(),
   		body varchar(200)
     );`;
+
+// post includes 
+/*
+	id: uuid,
+	userid: uuid
+	img: string,
+	date: postdate,
+	body: "Did you know that Tartu is the culture capital of the world in 2024? #Tartu2024",
+
+*/
 
 
 execute(createUsersTblQuery).then((result) => {

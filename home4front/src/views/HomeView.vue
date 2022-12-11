@@ -4,17 +4,17 @@
       <button v-if = "authResult" @click="Logout" >Logout</button>
     </div>
     <div class="centerdiv">
-
+ 
       <!-- Posts start -->
       <div class="posts">
         <h1>Post Will appear here</h1>
         <!-- Inserting posts from ThePost components -->
-        <!--<PostComp :post="post"></PostComp>-->
+        <PostComp :posts="posts"></PostComp>
 
         <div class="user-post">
           <!-- Like reset button -->
           <div class="reset-button">
-            <button @click="reset()"> Reset Likes</button>
+            <button @click="deleteAll()">Delete all posts</button>
           </div>
           <br>
           <br>
@@ -33,6 +33,7 @@
 <script>
 import PostComp from '../components/PostComp.vue';
 import auth from '../auth/index'
+import { tsImportEqualsDeclaration } from '@babel/types';
 
 export default {
   name: 'HomeView',
@@ -45,12 +46,10 @@ export default {
     authResult: auth.authenticated()
     }
   },
-  props: {
-    //msg: String
-  },
   methods: {
-    reset() {
-      this.$store.commit('reset')
+    deleteAll() {
+      this.$store.state.posts = []
+      // TODO: delete all from database
     },
     Logout() {
       fetch("http://localhost:3000/auth/logout", {
@@ -60,6 +59,7 @@ export default {
       .then((data) => {
         console.log(data);
         console.log('jwt removed');
+        this.$store.state.posts = []
         //console.log('jwt removed:' + auth.authenticated());
         this.$router.push("/login");
         //location.assign("/");
@@ -70,6 +70,26 @@ export default {
       })
     },
   },
+  async created() {
+        // Ask db for posts
+        await fetch('http://localhost:3000/posts', {
+          credentials: 'include',
+        })
+        .then((response) => response.json())
+        .then(data => {
+          /*
+          this.$store.state.posts = []
+          console.log("DATA: \n", data)
+          console.log("DATAROWS: \n", data.posts.rows)
+          console.log("Store posts: \n", this.$store.state.posts)
+          this.$store.state.posts = data.posts.rows
+          console.log("Store posts: \n", this.$store.state.posts)
+          */
+          this.posts =  data.posts.rows
+          console.log("Created posts: ", this.posts)
+        })
+        .catch(err => console.log(err.message))
+    },
 
 }
 </script>

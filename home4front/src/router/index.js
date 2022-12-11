@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from "vue-router"
 import HomeView from "../views/HomeView.vue"
 import SignUpView from "../views/SignUpView.vue"
 import LogInView from "../views/LogInView.vue"
+import AddPostView from "../views/AddPostView.vue"
 import auth from "../auth"
 
 const routes = [
@@ -10,7 +11,7 @@ const routes = [
 		name: "home",
 		component: HomeView,
 		beforeEnter: async (to, from, next) => {
-			console.log("Checking if user is authenticated")
+			console.log("Checking if user is authenticated");
 			let isAuth = await auth.authenticated();
 			if (!isAuth) {
 				next("/login");
@@ -28,6 +29,20 @@ const routes = [
 		path: "/login",
 		name: "LogIn",
 		component: LogInView,
+	},
+	{
+		path: "/addpost",
+		name: "AddPost",
+		component: AddPostView,
+		beforeEnter: async (to, from, next) => {
+			console.log("Checking if user is authenticated");
+			let isAuth = await auth.authenticated();
+			if (!isAuth) {
+				next("/login");
+			} else {
+				next();
+			}
+		},
 	},
 	{
 		path: "/contacts",
