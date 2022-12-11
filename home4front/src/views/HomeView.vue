@@ -6,7 +6,7 @@
     <div class="centerdiv">
       <!-- Posts start -->
       <div class="posts">
-      <div class="user-post">
+      <div class="buttons2">
         <div class="buttons">
           <ButtonComp
             v-if = "authResult"
@@ -31,7 +31,7 @@
 
         <!--<PostComp :posts="posts"></PostComp>-->
 
-        <div class="user-post">
+        <div class="buttons2">
           <!-- Like reset button -->
           <div class="reset-button">
             <button @click="deleteAll()">Delete all posts</button>
@@ -197,6 +197,19 @@ export default {
   height: auto;
   margin-top: 5px;
   background-color: darkgray;
+  border-radius: 10px;
+  padding: 5px 2px;
+
+  flex: 0 1 99%;
+
+}
+.buttons2 {
+  
+  width: 300px;
+  max-width: 400px;
+  height: auto;
+  margin-top: 5px;
+  background-color: white;
   border-radius: 10px;
   padding: 5px 2px;
 
