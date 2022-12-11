@@ -2,6 +2,7 @@
   <section class="content-area">
     <div class="left">
       <button v-if = "authResult" @click="Logout" >Logout</button>
+      <router-link v-if = "authResult" to="/addpost">add a post</router-link>
     </div>
     <div class="centerdiv">
  
