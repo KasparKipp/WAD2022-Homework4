@@ -104,7 +104,7 @@ app.post("/posts", async (req, res) => {
 
 
 // TODO: Update post
-app.post("/posts/:id", async (req, res) => {
+app.put("/posts/:id", async (req, res) => {
 	try {
 		console.log("Updating a post");
 		const token = req.cookies.jwt;

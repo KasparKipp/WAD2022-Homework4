@@ -52,7 +52,7 @@ export default {
       };
       // using Fetch - post method - send an HTTP post request to the specified URI with the defined body
       fetch(`http://localhost:3000/posts/${this.postId}`, {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
@@ -60,9 +60,7 @@ export default {
           body: JSON.stringify(data),
       })
       .then((response) => response.json())
-      .then((data) => {
-      console.log("Postitamisest saadud data on: ", data);
-      //this.$router.push("/");
+      .then(() => {
       location.assign("/");
       })
       .catch((e) => {
