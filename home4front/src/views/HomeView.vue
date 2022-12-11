@@ -85,7 +85,7 @@ export default {
       this.$router.push(`/post/${id}`)
     },
     AddPost() {
-      this.$router.push("/login")
+      this.$router.push("/addpost")
     },
     Logout() {
       fetch("http://localhost:3000/auth/logout", {

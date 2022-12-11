@@ -13,8 +13,8 @@
       <div id="myData"></div>
     </div>
     <br>
-    <div v-if="!(post.img === '')" class="post-image">
-      <img :src="post.img" alt="Post image">
+    <div v-show="imgloaded" class="post-image">
+      <img :src="post.img" @load="onImgLoad" alt="Post image">
     </div>
     <br>
 
@@ -31,11 +31,19 @@ export default {
   props: {
     post: Object,
   },
+  data () {
+    return {
+      imgloaded: false
+    }
+  },
   methods: {
   openPostview(id) {
     console.log("Opening post view for post: ", id)
     this.$router.push(`/post/${id}`)
   },
+  onImgLoad() {
+    this.imgloaded = true
+  }
   },
 }
 </script>
