@@ -14,6 +14,7 @@ const routes = [
 		beforeEnter: async (to, from, next) => {
 			console.log("Checking if user is authenticated");
 			let isAuth = await auth.authenticated();
+			console.log("Auth: ", isAuth)
 			if (!isAuth) {
 				next("/login");
 			} else {
@@ -68,7 +69,7 @@ const routes = [
 		component: () => import(/* webpackChunkName: "about" */ "../views/ContactsView.vue"),
 	},
 	{
-		path: "/:anythingbutaslash([^/]+)",
+		path: "/:anythingButASlash([^/]+)",
 		name: "Lost",
 		// route level code-splitting
 		// this generates a separate chunk (about.[hash].js) for this route

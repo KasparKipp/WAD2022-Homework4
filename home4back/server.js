@@ -50,7 +50,7 @@ app.get("/posts", async (req, res) => {
 		res.status(401).json({ error: error.message });
 	}
 })
-// TODO: GET post by id
+// GET post by id
 app.get("/posts/:id", async (req, res) => {
 	try {
 		
@@ -70,16 +70,14 @@ app.get("/posts/:id", async (req, res) => {
 		res.status(401).json({ error: error.message });
 	}
 })
-// TODO: Add post
+// Add post
 app.post("/posts", async (req, res) => {
 
 	try {
 		console.log("adding a post");
 		const token = req.cookies.jwt;
 		const { img, body } = req.body;
-		console.log("---------")
-		console.log("img: ", img, "\n body: ", body)
-		console.log("---------");
+		
 		const is_auth = jwt.verify(token, secret);
 		console.log(`Value of is_auth: ${is_auth}`);
 
