@@ -1,6 +1,5 @@
 <template>
-  <!-- Creating Posts, (v-for="post in posts"): goes through every available posts data -->
-  
+  <div @dblclick="openPostview(post.id)">
     <div class="user-post-header">
       <!-- Adding profile picture -->
       <img
@@ -33,6 +32,7 @@
         <p>{{ post.likes }} likes</p>
       </button>
     </div>
+    </div>
 </template>
 
 <script>
@@ -42,7 +42,10 @@ export default {
     post: Object,
   },
   methods: {
-    
+  openPostview(id) {
+    console.log("Opening post view for post: ", id)
+    this.$router.push(`/post/${id}`)
+  },
   },
 }
 </script>

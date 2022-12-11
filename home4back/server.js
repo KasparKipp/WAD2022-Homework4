@@ -19,7 +19,6 @@ const secret = "secret" // TODO: pick a stronger secret
 
 const maxAge = "1h" // jwt token expires in an hour
 
-// TODO: 
 const generateJWT = (id) => {
 	return jwt.sign({ id }, secret, { expiresIn: maxAge });
 	//jwt.sign(payload, secret, [options, callback]), and it returns the JWT as string
@@ -140,9 +139,10 @@ app.delete("/posts", async (req, res) => {
 // Delete a post by id:
 app.delete('/posts/:id', async (req, res) => {
 	try {
-		console.log("Deleting post", id);
+		
 		const token = req.cookies.jwt;
 		const id = req.params.id
+		console.log("Deleting post", id);
 		// If not auth this will throw
 		const is_auth = jwt.verify(token, secret);
 

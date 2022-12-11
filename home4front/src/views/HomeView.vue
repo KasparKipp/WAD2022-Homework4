@@ -10,8 +10,8 @@
       <div class="posts">
         <h1 v-if = "posts.length == 0">Go ahead and add some posts!</h1>
         <!-- Inserting posts from ThePost components -->
-        <div :key="post.id" v-for="post in posts" class="user-post">
-          <PostComp :post="post"></PostComp>
+        <div :key="post.id" v-for="post in posts" class="user-post" @dblclik="openPostview(post.id)">
+          <PostComp  :post="post"></PostComp>
         </div>
 
         <!--<PostComp :posts="posts"></PostComp>-->
@@ -62,6 +62,10 @@ export default {
         console.log(e);
         console.log("error");
       });
+    },
+    openPostview(id) {
+      console.log("Opening post view for post: ", id)
+      this.$router.push(`/post/${id}`)
     },
     Logout() {
       fetch("http://localhost:3000/auth/logout", {

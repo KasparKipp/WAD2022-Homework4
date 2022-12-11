@@ -1,31 +1,49 @@
 <template>
   <div class="form">
-    <h3>Add a post</h3>
-    <label for="body">Write your post body</label>
+    <h3>Edit your post with id: {{postId}}</h3>
+    <label for="body">Edit your post body</label>
     <input type="text" name="body"  required v-model="body">
-    <label for="password">Add a picture URL</label>
+    <label for="password">Edit your picture URL</label>
     <input type="url" name="image_url" required v-model="img">
     <div class="container">
-      <button @click="Post"  class="center">Post</button>
-      <button @click='this.$router.push("/")' class="center">Go back</button>
+      <button @click="Update"  class="center">Update</button>
+      <button @click='Delete' class="center">Delete</button>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-name: "AddPostView", 
-props: {
-  type: String,
-},
-data: function() {
-    return {
-   img: '',
-   body: '',
-  }
-  },
-  methods: {
-Post() {
+    name: "PostView", 
+    props: {
+        id: Number,
+    },
+    data: function() {
+        return {
+            img: '',
+            body: '',
+        }
+    },
+    computed: {
+        postId() {
+            return parseInt(this.$route.params.id)
+        }
+    },
+    methods: {
+        Delete() {
+            console.log("Deleting post: ", this.postId)
+            fetch(`http://localhost:3000/posts/${this.postId}`, {
+            method: "DELETE",
+            credentials: 'include',
+        })
+        .then((response) => response.json())
+        .catch((e) => {
+        console.log(e);
+        console.log("error");
+        });
+        this.$router.push("/")
+    },
+    Post() {
       var data = {
         img: this.img,
         body: this.body
