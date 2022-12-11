@@ -34,21 +34,14 @@ app.listen(port, () => {
 // GET all posts
 app.get("/posts", async (req, res) => {
 	try {
-		console.log("getting all posts");
 		const token = req.cookies.jwt;
-		console.log("Token: ", token)
 		// This throws error if jwt.verify fails. 
 		const is_auth = jwt.verify(token, secret)
-		console.log("User is authorised")
+		// console.log("User is authorised")
 		const posts = await pool.query(
 			// insert the user and the hashed password into the database
 			"SELECT * FROM posts ORDER BY 1 "
 		);
-		if (posts.rows.length === 0) {
-			console.log("POSTITUSI EI LEITUD");
-		} else {
-			console.log("Postitusi leiti")
-		}
 		
 		res.status(201).json({
 			posts: posts,
@@ -60,23 +53,16 @@ app.get("/posts", async (req, res) => {
 // TODO: GET post by id
 app.get("/posts/:id", async (req, res) => {
 	try {
+		
 		const token = req.cookies.jwt;
 		const id = req.params.id
 		console.log("Getting post with id: ", id);
-		console.log("Token: ", token);
 		// This throws error if jwt.verify fails.
 		const is_auth = jwt.verify(token, secret);
-		console.log("User is authorised");
 		const post = await pool.query(
 			// insert the user and the hashed password into the database
-			"SELECT * FROM posts WHERE id = $!", [id]
+			"SELECT * FROM posts WHERE id = $1", [id]
 		);
-		if (post.rows[0].length === 0) {
-			console.log("POSTITUSt EI LEITUD");
-		} else {
-			console.log("Postitus leiti");
-		}
-
 		res.status(201).json({
 			post: post,
 		}).send;
@@ -116,8 +102,38 @@ app.post("/posts", async (req, res) => {
 	}
 })
 
-// TODO: Update post
 
+// TODO: Update post
+app.post("/posts/:id", async (req, res) => {
+	try {
+		console.log("Updating a post");
+		const token = req.cookies.jwt;
+		const { img, body } = req.body;
+		const id = req.params.id
+		console.log("---------");
+		console.log("img: ", img, "\n body: ", body);
+		console.log("---------");
+		const is_auth = jwt.verify(token, secret);
+		console.log(`Value of is_auth: ${is_auth}`);
+
+		const userPost = await pool.query(
+			// insert the user and the hashed password into the database
+			"UPDATE posts SET img=$1, body=$2 where id=$3 RETURNING *",
+			[img, body, id]
+		);
+		console.log("Posts: ", userPost.rows);
+		if (userPost.rows.length === 0) {
+			console.log("postitust ei lisatud");
+			return res.status(401).json({ error: "Post was not added" });
+		}
+		token = generateJWT(userPost.rows[0].userid);
+		res.status(201).cookie("jwt", token, { maxAge: 6000000, httpOnly: true }).json({
+			user_id: userPost.rows[0].userid,
+		}).send;
+	} catch (error) {
+		res.status(401).json({ error: error.message });
+	}
+});
 // Delete all posts:
 app.delete("/posts", async (req, res) => {
 	try {
@@ -139,7 +155,6 @@ app.delete("/posts", async (req, res) => {
 // Delete a post by id:
 app.delete('/posts/:id', async (req, res) => {
 	try {
-		
 		const token = req.cookies.jwt;
 		const id = req.params.id
 		console.log("Deleting post", id);
@@ -219,7 +234,7 @@ app.post("/auth/signup", async (req, res) => {
 })
 
 app.get("/auth/authenticate", async (req, res) => {
-	console.log("authentication request has been arrived");
+	//console.log("authentication request has been arrived");
 	const token = req.cookies.jwt; // assign the token named jwt to the token const
 
 	try {
@@ -230,19 +245,19 @@ app.get("/auth/authenticate", async (req, res) => {
 				//token exists, now we try to verify it
 				if (err) {
 					// not verified, redirect to login page
-					console.log(err.message);
-					console.log("token is not verified");
+					console.log("token is not verified\n",err.message);
+					//console.log();
 					res.send({ authenticated: false }); // authenticated = false
 				} else {
 					// token exists and it is verified
-					console.log("author is authinticated");
+					//console.log("author is authinticated");
 					authenticated = true;
 					res.send({ authenticated: true }); // authenticated = true
 				}
 			})
 		} else {
 			//applies when the token does not exist
-			console.log("author is not authinticated");
+			//console.log("author is not authinticated");
 			res.send({ authenticated: authenticated }); // authenticated = false
 		}
 	} catch (err) {

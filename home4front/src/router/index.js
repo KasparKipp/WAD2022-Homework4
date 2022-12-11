@@ -36,7 +36,7 @@ const routes = [
 		name: "AddPost",
 		component: AddPostView,
 		beforeEnter: async (to, from, next) => {
-			console.log("Checking if user is authenticated");
+			//console.log("Checking if user is authenticated");
 			let isAuth = await auth.authenticated();
 			if (!isAuth) {
 				next("/login");
@@ -50,7 +50,7 @@ const routes = [
 		name: "Post",
 		component: PostView,
 		beforeEnter: async (to, from, next) => {
-			console.log("Checking if user is authenticated");
+			//console.log("Checking if user is authenticated");
 			let isAuth = await auth.authenticated();
 			if (!isAuth) {
 				next("/login");

@@ -10,7 +10,7 @@
       <div class="posts">
         <h1 v-if = "posts.length == 0">Go ahead and add some posts!</h1>
         <!-- Inserting posts from ThePost components -->
-        <div :key="post.id" v-for="post in posts" class="user-post" @dblclik="openPostview(post.id)">
+        <div :key="post.id" v-for="post in posts" class="user-post" >
           <PostComp  :post="post"></PostComp>
         </div>
 

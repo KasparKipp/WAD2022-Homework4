@@ -6,7 +6,7 @@
     <label for="password">Edit your picture URL</label>
     <input type="url" name="image_url" required v-model="img">
     <div class="container">
-      <button @click="Update"  class="center">Update</button>
+      <button @click="UpdatePost"  class="center">Update</button>
       <button @click='Delete' class="center">Delete</button>
     </div>
   </div>
@@ -16,7 +16,6 @@
 export default {
     name: "PostView", 
     props: {
-        id: Number,
     },
     data: function() {
         return {
@@ -27,6 +26,9 @@ export default {
     computed: {
         postId() {
             return parseInt(this.$route.params.id)
+        },
+        postData() {
+            return 
         }
     },
     methods: {
@@ -43,13 +45,13 @@ export default {
         });
         this.$router.push("/")
     },
-    Post() {
+    UpdatePost() {
       var data = {
         img: this.img,
         body: this.body
       };
       // using Fetch - post method - send an HTTP post request to the specified URI with the defined body
-      fetch("http://localhost:3000/posts", {
+      fetch(`http://localhost:3000/posts/${this.postId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -68,7 +70,22 @@ export default {
         console.log("error");
       });
     },
-  }, 
+    }, 
+    async created() {
+        // Ask db for posts
+        console.log("Is created and getting post data")
+        await fetch(`http://localhost:3000/posts/${this.postId}`, {
+          credentials: 'include',
+        })
+        .then((response) => response.json())
+        .then(data => {
+          //console.log("Post data: ", data)
+          this.img =  data.post.rows[0].img
+          this.body = data.post.rows[0].body
+          console.log("Post data loaded")
+        })
+        .catch(err => console.log(err.message))
+    },
   }
 
 </script>
