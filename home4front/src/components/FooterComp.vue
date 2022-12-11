@@ -17,7 +17,7 @@ footer{
   left: 0;
   bottom: 0;
   width: calc(100% - 20px);
-  margin: 30px 5px 5px 5px;
+  margin: 30px 5px 0px 5px;
   padding: 10px 0;
   background-color: darkgray;
   border-radius: 10px;

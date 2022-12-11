@@ -136,26 +136,25 @@ export default {
 
 .posts {
   display: flex;
-  justify-content: space-around;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
 }
 .buttons {
   margin: 0 auto;
   display: block;
-  height: 200;
 }
 
 .user-post {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  width: 300px;
-  max-width: 400px;
+  width: 80%;
+  min-width: fit-content;
+  max-width: 500px;
   height: auto;
   margin-top: 5px;
   background-color: darkgray;
   border-radius: 10px;
   padding: 5px 2px;
-  flex: 0 1 99%;
 }
 
 .left {
@@ -189,6 +188,7 @@ export default {
   grid-template-columns: 20% 1fr 1fr 1fr 20%;
   gap: 10px;
   width: calc(100% - 10px);
+  padding-bottom: 60px;
 }
 .user-post {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
