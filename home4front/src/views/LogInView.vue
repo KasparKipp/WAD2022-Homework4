@@ -29,7 +29,6 @@ LogIn() {
       var data = {
         email: this.email,
         password: this.password,
-        user_id: this.user_id,
       };
       // using Fetch - post method - send an HTTP post request to the specified URI with the defined body
       fetch("http://localhost:3000/auth/login", {
@@ -42,9 +41,8 @@ LogIn() {
       })
       .then((response) => response.json())
       .then((data) => {
-      this.user_id = data.user_id
       console.log(data);
-      console.log(this.user_id)
+      console.log(data.user_id)
       //this.$router.push("/");
       location.assign("/");
       })

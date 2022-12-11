@@ -101,7 +101,7 @@ app.post("/posts", async (req, res) => {
 })
 
 
-// TODO: Update post
+// Update post
 app.put("/posts/:id", async (req, res) => {
 	try {
 		console.log("Updating a post");
@@ -201,7 +201,7 @@ app.post("/auth/login", async (req, res) => {
 		res.status(401).json({ error: error.message });
 	}
 })
-// TODO: signup
+// POST Signup
 app.post("/auth/signup", async (req, res) => {
 	try {
 		console.log("a signup request has arrived");
@@ -230,7 +230,7 @@ app.post("/auth/signup", async (req, res) => {
 		res.status(400).send(err.message);
 	}
 })
-
+// get isAuth API for frontend
 app.get("/auth/authenticate", async (req, res) => {
 	//console.log("authentication request has been arrived");
 	const token = req.cookies.jwt; // assign the token named jwt to the token const
@@ -249,7 +249,6 @@ app.get("/auth/authenticate", async (req, res) => {
 				} else {
 					// token exists and it is verified
 					//console.log("author is authinticated");
-					authenticated = true;
 					res.send({ authenticated: true }); // authenticated = true
 				}
 			})

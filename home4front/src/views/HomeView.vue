@@ -47,7 +47,7 @@ export default {
   data: function() {
     return {
     posts:[ ],
-    authResult: auth.authenticated()
+    authResult: false,
     }
   },
   methods: {
@@ -75,7 +75,7 @@ export default {
       .then((data) => {
         console.log(data);
         console.log('jwt removed');
-        this.$store.state.posts = []
+        this.posts = []
         //console.log('jwt removed:' + auth.authenticated());
         this.$router.push("/login");
         //location.assign("/");
@@ -102,6 +102,7 @@ export default {
           console.log("Store posts: \n", this.$store.state.posts)
           */
           this.posts =  data.posts.rows
+          this.authResult = auth.authenticated()
           console.log("Created posts: ", this.posts)
         })
         .catch(err => console.log(err.message))
