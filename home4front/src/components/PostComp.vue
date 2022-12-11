@@ -3,7 +3,7 @@
     <div class="user-post-header">
       <!-- Adding profile picture -->
       <img
-          :src="[post.profile === '' ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiXiGmEyNs2kbk30k1E3aH2ezJT-MUV5ouDy-ESy6WqFYMwdbk' : post.profile ]"
+          src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiXiGmEyNs2kbk30k1E3aH2ezJT-MUV5ouDy-ESy6WqFYMwdbk'
           width="25" height="25"
           alt="User profile picture"
       />
@@ -22,16 +22,6 @@
       <p>{{ post.body }}</p>
     </div>
 
-    <div class="like-button">
-      <button
-          @click="like(post)"
-          style="background-color:darkgrey;border:none">
-        <img
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Facebook_Thumb_icon.svg/1200px-Facebook_Thumb_icon.svg.png"
-            width="25" height="25" alt="Like button"/>
-        <p>{{ post.likes }} likes</p>
-      </button>
-    </div>
     </div>
 </template>
 

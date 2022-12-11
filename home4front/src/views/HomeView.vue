@@ -1,13 +1,28 @@
 <template>
   <section class="content-area">
     <div class="left">
-      <button v-if = "authResult" @click="Logout" >Logout</button>
-      <router-link v-if = "authResult" to="/addpost">add a post</router-link>
+      
     </div>
     <div class="centerdiv">
- 
       <!-- Posts start -->
       <div class="posts">
+      <div class="user-post">
+        <div class="buttons">
+          <ButtonComp
+            v-if = "authResult"
+            @clicked="Logout" 
+            :text="'Logout'" 
+          />
+          <ButtonComp
+            v-if = "authResult"
+            @clicked="AddPost" 
+            :text="'Add a post'"
+          />
+        </div>
+      </div>
+      
+ 
+      
         <h1 v-if = "posts.length == 0">Go ahead and add some posts!</h1>
         <!-- Inserting posts from ThePost components -->
         <div :key="post.id" v-for="post in posts" class="user-post" >
@@ -38,11 +53,13 @@
 <script>
 import PostComp from '../components/PostComp.vue';
 import auth from '../auth/index'
+import ButtonComp from '../components/ButtonComp.vue'
 
 export default {
   name: 'HomeView',
   components: {
     PostComp,
+    ButtonComp,
   },
   data: function() {
     return {
@@ -66,6 +83,9 @@ export default {
     openPostview(id) {
       console.log("Opening post view for post: ", id)
       this.$router.push(`/post/${id}`)
+    },
+    AddPost() {
+      this.$router.push("/login")
     },
     Logout() {
       fetch("http://localhost:3000/auth/logout", {
@@ -119,6 +139,11 @@ export default {
   justify-content: space-around;
   flex-direction: row;
   flex-wrap: wrap;
+}
+.buttons {
+  margin: 0 auto;
+  display: block;
+  height: 200;
 }
 
 .user-post {
