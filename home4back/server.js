@@ -18,6 +18,11 @@ app.use(cookieParser());
 const secret = "secret" // TODO: pick a stronger secret
 
 const maxAge = "1h" // jwt token expires in an hour
+const cookieOptions = { 
+	maxAge: 6000000, 
+	httpOnly: true,
+	sameSite: true
+};
 
 const generateJWT = (id) => {
 	return jwt.sign({ id }, secret, { expiresIn: maxAge });
@@ -92,7 +97,7 @@ app.post("/posts", async (req, res) => {
 			return res.status(401).json({ error: "Post was not added" });
 		}
 		token = generateJWT(userPost.rows[0].userid);
-		res.status(201).cookie("jwt", token, { maxAge: 6000000, httpOnly: true }).json({
+		res.status(201).cookie("jwt", token, cookieOptions).json({
 			user_id: userPost.rows[0].userid,
 		}).send;
 	} catch (error) {
@@ -125,7 +130,7 @@ app.put("/posts/:id", async (req, res) => {
 			return res.status(401).json({ error: "Post was not added" });
 		}
 		token = generateJWT(userPost.rows[0].userid);
-		res.status(201).cookie("jwt", token, { maxAge: 6000000, httpOnly: true }).json({
+		res.status(201).cookie("jwt", token, cookieOptions).json({
 			user_id: userPost.rows[0].userid,
 		}).send;
 	} catch (error) {
@@ -144,7 +149,7 @@ app.delete("/posts", async (req, res) => {
 			// insert the user and the hashed password into the database
 			"TRUNCATE posts"
 		);
-		res.status(204).cookie("jwt", token, { maxAge: 6000000, httpOnly: true }).send;
+		res.status(204).cookie("jwt", token, cookieOptions).send;
 	} catch (error) {
 		res.status(401).json({ error: error.message });
 	}
@@ -163,7 +168,7 @@ app.delete('/posts/:id', async (req, res) => {
 			// insert the user and the hashed password into the database
 			"DELETE FROM posts where id = $1", [id]
 		);
-		res.status(204).cookie("jwt", token, { maxAge: 6000000, httpOnly: true }).send;
+		res.status(204).cookie("jwt", token, cookieOptions).send;
 	} catch (error) {
 		res.status(401).json({ error: error.message });
 	}
@@ -196,7 +201,7 @@ app.post("/auth/login", async (req, res) => {
 		console.log(user.rows[0].id)
 		const token = await generateJWT(user.rows[0].id);
         console.log(`Token: ${ token }`)
-		res.status(201).cookie("jwt", token, { maxAge: 6000000, httpOnly: true }).json({ user_id: user.rows[0].id })
+		res.status(201).cookie("jwt", token, cookieOptions).json({ user_id: user.rows[0].id })
 			.send;
 	} catch (error) {
 		res.status(401).json({ error: error.message });
@@ -224,7 +229,7 @@ app.post("/auth/signup", async (req, res) => {
 		//console.log(token);
 		//res.cookie("isAuthorized", true, { maxAge: 1000 * 60, httpOnly: true });
 		//res.cookie('jwt', token, { maxAge: 6000000, httpOnly: true });
-		res.status(201).cookie("jwt", token, { maxAge: 6000000, httpOnly: true }).json({ user_id: authUser.rows[0].id })
+		res.status(201).cookie("jwt", token, cookieOptions).json({ user_id: authUser.rows[0].id })
 			.send;
 	} catch (err) {
 		console.error(err.message);
@@ -268,7 +273,8 @@ app.get("/auth/authenticate", async (req, res) => {
 app.get('/auth/logout', (req, res) => {
     console.log('delete jwt request arrived');
 	// QUESTION: using the clearCookie method user remained logged in, why?
-    res.status(202).cookie('jwt', '', { maxAge: 1}).json({ "Msg": "cookie cleared" }).send
+    //res.status(202).cookie('jwt', '', cookieOptions).json({ "Msg": "cookie cleared" }).send
+	res.status(202).clearCookie("jwt").json({ Msg: "cookie cleared" }).send;
 })
 
 /* Social media app routes end */
